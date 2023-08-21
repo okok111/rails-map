@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_01_12_035039) do
+ActiveRecord::Schema.define(version: 2023_08_21_023606) do
 
   create_table "comments", force: :cascade do |t|
     t.string "content"
@@ -39,6 +39,8 @@ ActiveRecord::Schema.define(version: 2023_01_12_035039) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.text "maplink"
+    t.float "lat"
+    t.float "lng"
   end
 
   create_table "users", force: :cascade do |t|
