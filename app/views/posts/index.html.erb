@@ -57,6 +57,33 @@
     let selectedMarkers = [];
     let map;
     let markers = [];
+
+      function setupMarkerButton(marker, markerLatLng) {
+        let addButton = document.createElement('button');
+        addButton.innerText = '追加';
+
+        addButton.addEventListener('click', function() {
+            console.log("1"); 
+            if (selectedMarkers.length < 2) {
+                selectedMarkers.push(markerLatLng);
+                console.log("1"); 
+                marker.setIcon('https://maps.google.com/mapfiles/ms/icons/green-dot.png');
+                if (selectedMarkers.length === 1) {
+                    let l1 =document.getElementById('location1');
+                    l1.innerText = marker.getTitle();
+
+                } else if (selectedMarkers.length === 2) {
+                    let l2 = document.getElementById('location2');
+                    l2.innerText = marker.getTitle();
+                }
+            }
+            if (selectedMarkers.length === 2) {
+                calculateDistanceAndTime(selectedMarkers[0], selectedMarkers[1]);
+            }
+        });
+        return addButton;
+    }
+
     function initMap() {
 
       //初期表示位置
@@ -95,17 +122,6 @@
             infowindowContent.appendChild(addButton);
             infowindowContent.appendChild(document.createElement('br')); // 必要に応じて改行を追加
             infowindowContent.innerHTML += "<a href='<%= post_url(post.id) %>' target='_blank'><%= post.title %></a>";
-            // ボタンのクリックイベントを設定
-            addButton.addEventListener('click', function() {
-                if (selectedMarkers.length < 2) {
-                    selectedMarkers.push(markerLatLng);
-                    marker.setIcon('https://maps.google.com/mapfiles/ms/icons/green-dot.png'); // 選択済みのマーカーを緑色に変更
-                    infowindow.close();
-                }
-                if (selectedMarkers.length === 2) {
-                    calculateDistanceAndTime(selectedMarkers[0], selectedMarkers[1]); // 修正: calculateDistanceAndTime を呼び出す
-                }
-            });
             
              //マーカーをクリックしたとき、詳細情報を表示
             let infowindow = new google.maps.InfoWindow({
@@ -119,39 +135,12 @@
        })();
       <% end %>
         
-        // マーカーをクリックしたときの処理を追加
-        markers.push(new google.maps.Marker({ 
-            position: { lat: <%= @posts[0].lat %>, lng: <%= @posts[0].lng %> }, 
-            map: map,
-            title: '<%= @posts[0].title %>'
-        }));
-        
-        markers.push(new google.maps.Marker({ 
-            position: { lat: <%= @posts[1].lat %>, lng: <%= @posts[1].lng %> }, 
-            map: map,
-            title: '<%= @posts[1].title %>'
-        }));
-        
-        // マーカーをクリックしたときの処理を追加
-        markers[0].addListener('click', function() {
-            document.getElementById('location1').innerText = markers[0].getTitle();
-            let latitude = markers[0].getPosition().lat();
-            let longitude = markers[0].getPosition().lng();
-            selectedMarkers[0] = { lat: latitude, lng: longitude };
-        });
-
-        markers[1].addListener('click', function() {
-            document.getElementById('location2').innerText = markers[1].getTitle();
-            let latitude = markers[1].getPosition().lat();
-            let longitude = markers[1].getPosition().lng();
-            selectedMarkers[1] = { lat: latitude, lng: longitude };
-        });
-
-        
         // 検索ボタンがクリックされたときの処理を追加
         document.getElementById('searchButton').addEventListener('click', function() {
             if (selectedMarkers.length === 2) {
-                calculateDistanceAndTime(selectedMarkers[0], selectedMarkers[1]);
+                let marker1LatLng = selectedMarkers[0];
+                let marker2LatLng = selectedMarkers[1];
+                calculateDistanceAndTime(marker1LatLng, marker2LatLng);
             } else {
                 alert('2か所の場所を選択してください。');
             }
