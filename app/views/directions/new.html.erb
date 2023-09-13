@@ -1,5 +1,8 @@
 <div class="form_wrapper">
   <%= form_with(url: create_direction_path, method: :post, html: { class: "form_body" }) do |form| %>
+      <button type="button" class="cp_button02" onclick="addWaypoint()">経由地<br>追加</button>
+      <button type="button" class="cp_button02 m-l25" onclick="removeWaypoint()">経由地<br>削除</button><br>
+
     <div class="cp_iptxt">
       <%= form.text_field :start_location, id: "start_location", class: "ef", type: "text", placeholder: "", autocomplete: 'off' %>
       <label>出発地</label>
@@ -31,8 +34,6 @@
     </div>
 
     <div class="button_wrapper">
-      <button type="button" class="cp_button02" onclick="addWaypoint()">経由地<br>追加</button>
-      <button type="button" class="cp_button02 m-l25" onclick="removeWaypoint()">経由地<br>削除</button><br>
       <%= button_tag "検索", type: "submit", class: "cp_button01" %>
     </div>
   <% end %>
@@ -82,7 +83,7 @@
           waypointToRemove.parentNode.removeChild(waypointToRemove);
           waypointCount--;
       } else {
-          // alert("警告文入れる場合はここに");
+          alert("これ以上消せません");
       }
   }
 </script>
