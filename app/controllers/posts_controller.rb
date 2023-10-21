@@ -4,6 +4,10 @@ class PostsController < ApplicationController
       @posts = Post.all
   end
 
+  def samplemap
+
+  end
+  
   def new
       @post = Post.new
   end
