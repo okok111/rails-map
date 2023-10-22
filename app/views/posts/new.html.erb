@@ -21,6 +21,10 @@
     <input id="address" type="textbox" placeholder="検索する">
     <input type="button" value="検索" onclick="codeAddress()">
     <p>マーカーをドラック＆ドロップで位置の調整ができます。<p>
+    <hr>
+    <input type="text" id="hospital-search" placeholder="病院を検索">
+    <button onclick="searchHospitals()">病院を検索</button>
+
     <div id='map'></div>
     <style>
         #map{
@@ -42,7 +46,50 @@
             });
         });
         }
+        let hospitalMarkers = []; // 病院のマーカーを格納する配列
 
+        // 病院を検索する関数
+        function searchHospitals() {
+        const map = new google.maps.Map(document.getElementById('map'));
+        const input = document.getElementById('hospital-search');
+        const request = {
+            location: map.getCenter(),
+            radius: 5000, // 検索範囲を設定（メートル単位）
+            keyword: input.value,
+            type: 'hospital'
+        };
+
+        const service = new google.maps.places.PlacesService(map);
+        service.nearbySearch(request, (results, status) => {
+            if (status === google.maps.places.PlacesServiceStatus.OK) {
+            // 以前のマーカーを削除
+            clearHospitalMarkers();
+            
+            for (let i = 0; i < results.length; i++) {
+                const hospital = results[i];
+                createHospitalMarker(hospital);
+            }
+            }
+        });
+        }
+
+        // 病院のマーカーを作成する関数
+        function createHospitalMarker(place) {
+        const marker = new google.maps.Marker({
+            map: map,
+            position: place.geometry.location,
+            title: place.name
+        });
+        hospitalMarkers.push(marker);
+        }
+
+        // 以前の病院マーカーを削除する関数
+        function clearHospitalMarkers() {
+        for (let i = 0; i < hospitalMarkers.length; i++) {
+            hospitalMarkers[i].setMap(null);
+        }
+        hospitalMarkers = [];
+        }
         //検索後のマップ作成
         let geocoder
         let aft
