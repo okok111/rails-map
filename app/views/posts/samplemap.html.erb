@@ -10,7 +10,7 @@ var service;
 // マップの初期設定
 function initMap() {
     // Mapクラスのインスタンスを作成（緯度経度は池袋駅に設定）
-    // var initPos = new google.maps.LatLng(35.729756, 139.711069);
+    var initPos = new google.maps.LatLng(35.729756, 139.711069);
     // 地図のプロパティを設定（倍率、マーカー表示位置、地図の種類）
     var myOptions = {
         zoom: 15,
@@ -23,7 +23,7 @@ function initMap() {
     var request = {
         location: initPos,
         radius: 1000,      // ※１ 表示する半径領域を設定(1 = 1M)
-        types: ['cafe']    // ※２ typesプロパティの施設タイプを設定
+        type: ['cafe']    // ※２ typesプロパティの施設タイプを設定
     };
     var service = new google.maps.places.PlacesService(myMap);
     service.search(request, Result_Places);
@@ -100,4 +100,4 @@ google.maps.event.addDomListener(window, 'load', initialize);
 </script>
 
 
-    <script src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['GOOGLE_MAPS_API_KEY'] %>&libraries=initMap" async defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['GOOGLE_MAPS_API_KEY'] %>&libraries=places&callback=initMap" async defer></script>
