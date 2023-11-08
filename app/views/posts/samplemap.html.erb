@@ -1,4 +1,4 @@
-<input type="text" size="55" id="search" placeholder="検索したい施設" />
+<input type="text" size="55" id="search" placeholder="地域と施設を指定" />
 <input type="button" size="55" value="検索" onClick="SearchGo()" />
 <div id="map_canvas"></div>
 
@@ -32,7 +32,7 @@ function initMap() {
             var request = {
                 location: initPos,
                 radius: 1000,
-                type: null
+                type: ["hospital"] //初期値の施設は https://developers.google.com/maps/documentation/javascript/supported_types?hl=ja 参照
             };
             service = new google.maps.places.PlacesService(myMap);
             service.search(request, Result_Places);
